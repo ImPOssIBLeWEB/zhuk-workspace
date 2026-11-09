@@ -33,27 +33,76 @@ const key=new THREE.DirectionalLight(0xffffff,3.1);key.position.set(-35,70,80);s
 const rim=new THREE.DirectionalLight(0x85858c,1.7);rim.position.set(20,-9,-45);scene.add(rim);
 const cyan=new THREE.MeshBasicMaterial({color:0xc9d5e0});const steel=new THREE.MeshStandardMaterial({color:0x6b6b70,metalness:.78,roughness:.38,flatShading:true});const dark=new THREE.MeshStandardMaterial({color:0x29292d,metalness:.85,roughness:.3});const panel=new THREE.MeshStandardMaterial({color:0x98989d,metalness:.8,roughness:.42,flatShading:true});
 function box(w,h,d,mat,x=0,y=0,z=0,parent){const m=new THREE.Mesh(new THREE.BoxGeometry(w,h,d),mat);m.position.set(x,y,z);(parent||scene).add(m);return m}
-function ship(name,scale=1){const g=new THREE.Group();g.userData.name=name;
-const shape=new THREE.Shape();shape.moveTo(0,-26);shape.lineTo(-17,18);shape.lineTo(17,18);shape.closePath();
-const geo=new THREE.ExtrudeGeometry(shape,{depth:3,bevelEnabled:true,bevelThickness:.85,bevelSize:.9,bevelSegments:1});geo.rotateX(-Math.PI/2);
-const hull=new THREE.Mesh(geo,steel);hull.rotation.x=Math.PI;hull.position.y=1;g.add(hull);
-const core=box(11,2,20,panel,0,3.5,1,g);core.rotation.y=Math.PI;
-box(6,4,12,dark,0,6,4,g);box(5,2.5,5,steel,0,9,8,g);box(11,1.5,2,panel,0,10,8,g);
-for(let i=-1;i<=1;i++){let engine=new THREE.Mesh(new THREE.CylinderGeometry(1.65,1.65,2,12),dark);engine.rotation.x=Math.PI/2;engine.position.set(i*5,-.2,18);g.add(engine);let glow=new THREE.Mesh(new THREE.CircleGeometry(1.34,16),cyan);glow.position.set(i*5,-.2,19.1);glow.rotation.y=Math.PI;g.add(glow)}
-for(let i=0;i<9;i++){const zz=12-i*3;const width=15-i*1.5;for(const side of [-1,1]){let strip=box(.35,.22,1.4,i%3?panel:cyan,side*width*.48,2.2,zz,g);strip.rotation.y=side*.1}}
-// Detailed armor plating, trench lighting and recessed surface structures.
-for(let row=0;row<11;row++){const z=-19+row*3.0;const half=3.2+(row/10)*11.5;
- for(const side of [-1,1]){for(let p=0;p<2;p++){
- const plate=box(half*.22,.12,1.2,(row+p)%4===0?dark:panel,side*(half*(.34+p*.24)),2.35,z,g);
- plate.rotation.y=side*.03;
+function ship(name,scale=1){
+ const g=new THREE.Group();g.userData.name=name;
+ // Detailed triangular Imperial-inspired hull, with the sharp bow at +Z.
+ const outline=new THREE.Shape();
+ outline.moveTo(0,30);outline.lineTo(-20,-19);outline.lineTo(-18,-23);
+ outline.lineTo(18,-23);outline.lineTo(20,-19);outline.closePath();
+ const hullGeo=new THREE.ExtrudeGeometry(outline,{depth:2.2,bevelEnabled:true,bevelSize:.6,bevelThickness:.45,bevelSegments:1});
+ hullGeo.rotateX(Math.PI/2);
+ const hull=new THREE.Mesh(hullGeo,steel);hull.position.y=1.2;g.add(hull);
+ const lower=new THREE.Mesh(hullGeo,dark);lower.position.y=-1.8;lower.scale.set(.96,.85,.96);g.add(lower);
+ // Dark recessed perimeter trench along both flanks.
+ for(let side of [-1,1]){
+   for(let j=0;j<18;j++){
+     let z=-21+j*2.65, width=19.3*(30-z)/53;
+     const p=box(.9,.45,2.25,j%5===0?panel:dark,side*width*.9,.5,z,g);
+     p.rotation.y=side*.35;
+     if(j%3===0)box(.65,.25,1.4,cyan,side*width*.83,.83,z,g);
+   }
  }
- if(row%2===0){const trench=box(.27,.18,2.1,dark,side*half*.75,2.45,z,g);trench.rotation.y=side*.06}
- }}
-for(let i=-4;i<=4;i++){box(.38,.5,.9,dark,i*1.05,6.3,2.5,g);box(.3,.45,.75,panel,i*.92,7,7.5,g)}
-for(let side of [-1,1]){box(1.25,1.4,3.2,dark,side*3.1,8.6,7.9,g);box(.8,.35,3.4,panel,side*2.9,9.7,7.8,g)}
-// Point the triangular bow toward the camera: rear engines face away.
-g.rotation.y=Math.PI;g.rotation.x=-.14;g.rotation.z=-.055;g.scale.setScalar(scale);scene.add(g);return g}
-
+ // Wedge-shaped layered dorsal decks, growing narrower toward bridge.
+ function topDeck(w,back,front,y,h,mat){
+   const p=new THREE.Shape();
+   p.moveTo(0,front);p.lineTo(-w/2,back);p.lineTo(w/2,back);p.closePath();
+   const geom=new THREE.ExtrudeGeometry(p,{depth:h,bevelEnabled:true,bevelSize:.22,bevelThickness:.18,bevelSegments:1});
+   geom.rotateX(Math.PI/2);
+   const mesh=new THREE.Mesh(geom,mat);mesh.position.y=y;g.add(mesh);
+ }
+ topDeck(22,-14,15,3.4,1.8,panel);
+ topDeck(16,-16,8,5.5,2.1,steel);
+ topDeck(11,-17,1,7.7,1.8,dark);
+ topDeck(8,-17,-2,9.4,1.6,panel);
+ // Neck and iconic wide bridge with twin sensor spheres.
+ box(4.3,6.4,5.5,steel,0,13,-12,g);
+ box(15,2.5,5.3,panel,0,17,-12,g);
+ box(16.6,.9,5.7,dark,0,18.5,-12,g);
+ for(const side of [-1,1]){
+   box(1.1,2.3,1.3,steel,side*6.2,20,-12,g);
+   const dome=new THREE.Mesh(new THREE.SphereGeometry(1.85,12,9),panel);
+   dome.position.set(side*6.2,22.2,-12);g.add(dome);
+   const neck=box(.8,1.3,1.1,dark,side*6.2,20.3,-12,g);
+ }
+ // Surface plating: restrained tonal relief, dark gaps, window strips.
+ for(let row=0;row<23;row++){
+   const z=-20+row*2.1;
+   const width=Math.max(1,19.5*(30-z)/53);
+   for(const side of [-1,1]){
+     for(let col=0;col<3;col++){
+       const fraction=.22+col*.22;
+       const p=box(Math.max(.5,width*.15),.12,.8+(row%3)*.17,(row+col)%4===0?dark:panel,side*width*fraction,3.15,z,g);
+       p.rotation.y=side*.02;
+     }
+     if(row%4===0)box(.25,.2,1.2,dark,side*width*.75,3.32,z,g);
+   }
+ }
+ for(let i=0;i<10;i++){
+   const z=-16+i*1.8;
+   for(const side of [-1,1]){
+     box(1.2,.4,.6,i%3===0?cyan:dark,side*(4.3-i*.25),10.2-i*.22,z,g);
+   }
+ }
+ // Three engines are at the stern, away from the camera, not at the bow.
+ for(let i=-1;i<=1;i++){
+   const radius=i===0?2.15:1.6;
+   const engine=new THREE.Mesh(new THREE.CylinderGeometry(radius,radius,3,14),dark);
+   engine.rotation.x=Math.PI/2;engine.position.set(i*6,-.15,-24.5);g.add(engine);
+   const emitter=new THREE.Mesh(new THREE.CircleGeometry(radius*.85,18),cyan);
+   emitter.position.set(i*6,-.15,-26.2);emitter.rotation.y=Math.PI;g.add(emitter);
+ }
+ g.rotation.x=-.14;g.rotation.z=-.055;g.scale.setScalar(scale);scene.add(g);return g;
+}
 // Executor-inspired flagship: broad armored dorsal hull with a long tapered prow.
 // Independent from the escort model so detailed GLB assets can replace it later.
 function createFlagship(){
@@ -149,7 +198,7 @@ function resize(){const w=root.clientWidth,h=root.clientHeight;if(!w||!h)return;
 function replay(){timeline=0;playing=true;interceptors.forEach(f=>f.visible=false);detail.hidden=true;status.textContent='FLEET ARRIVAL / IN PROGRESS'}
 function animate(now){raf=requestAnimationFrame(animate);if(!active||document.hidden)return;const dt=Math.min(.05,(now-last)/1000||.016);last=now;if(playing&&!reduced)timeline+=dt;if(reduced)timeline=99;
 const hyper=timeline>4.1&&timeline<5.35;streaks.visible=hyper;jump.classList.toggle('active',timeline>5.05&&timeline<5.25);
-ships.forEach((s,i)=>{const start=i===6?5.1:.6+i*.48;const duration=i===6?2.25:1.9;const t=ease((timeline-start)/duration);s.visible=t>0;s.position.copy(s.userData.target);s.position.z-= (1-t)*(i===6?430:240);s.position.y+=(1-t)*35;if(t>0)s.rotation.y=(i===6?0:Math.PI)+Math.sin(now*.00027+i)*.018;s.rotation.z=-.055+Math.sin(now*.00035+i)*.008;});
+ships.forEach((s,i)=>{const start=i===6?5.1:.6+i*.48;const duration=i===6?2.25:1.9;const t=ease((timeline-start)/duration);s.visible=t>0;s.position.copy(s.userData.target);s.position.z-= (1-t)*(i===6?430:240);s.position.y+=(1-t)*35;if(t>0)s.rotation.y=Math.sin(now*.00027+i)*.018;s.rotation.z=-.055+Math.sin(now*.00035+i)*.008;});
 updateInterceptors(timeline,now);
 if(timeline>12.7&&playing){playing=false;status.textContent='FLEET FORMATION COMPLETE / 07 VESSELS + 08 INTERCEPTORS'}
 if(!playing&&timeline===0)status.textContent='SELECT A VESSEL';
