@@ -75,6 +75,89 @@
 @media(max-width:760px){.contacts-section{padding:80px 20px 30px}.contact-orbits{grid-template-columns:repeat(3,minmax(0,1fr));row-gap:38px;column-gap:10px;margin:40px auto 65px}.contact-orbits:before{display:none}.contact-planet:nth-child(n){transform:none}.contact-planet:nth-child(n):hover{transform:translateY(-6px)}.contact-planet:nth-child(4){grid-column:1/2}.contact-planet:nth-child(5){grid-column:3/4}.contact-world,.contact-planet:nth-child(n) .contact-world{width:clamp(80px,23vw,135px)}.contact-planet:nth-child(3) .contact-world{width:clamp(98px,26vw,148px)}.contact-planet{gap:9px}.contact-handle{font-size:10px}.contact-name{font-size:12px}.payment-panel{grid-template-columns:1fr;gap:19px}.payment-methods{justify-content:flex-start}.payment-method{font-size:11px}.contacts-footer{flex-wrap:wrap;gap:15px}}
 @media(max-width:390px){.contact-world,.contact-planet:nth-child(n) .contact-world{width:78px}.contact-planet:nth-child(3) .contact-world{width:94px}.contact-handle{font-size:9px}}
 @media(prefers-reduced-motion:reduce){.contact-world:before{animation:none}}
+/* v2: asymmetrical celestial chart — each destination is a different world. */
+.contact-planet:nth-child(1) .contact-world{
+ background:radial-gradient(circle at 27% 26%,#b9b9c1 0%,#81818b 17%,#50505a 43%,#141419 84%),
+ repeating-radial-gradient(circle at 44% 59%,#fff2 0 3px,#0002 6px 14px);
+}
+.contact-planet:nth-child(1) .contact-world:before{
+ background:radial-gradient(circle at 30% 40%,#19191e 0 9px,#b8b8be55 10px 12px,transparent 14px),
+ radial-gradient(circle at 69% 29%,#17171c 0 13px,#ffffff21 14px 17px,transparent 19px),
+ radial-gradient(circle at 55% 73%,#292930 0 18px,#eeeeee18 19px 22px,transparent 24px),
+ radial-gradient(circle at 15% 75%,#202025 0 8px,transparent 10px);
+ animation:none;
+}
+.contact-planet:nth-child(2) .contact-world{
+ background:radial-gradient(circle at 28% 24%,#dfdfe2,#a1a1aa 19%,#555560 47%,#13131a 85%);
+}
+.contact-planet:nth-child(2) .contact-world:before{
+ background:repeating-linear-gradient(174deg,transparent 0 10px,#e7e7eb50 11px 15px,#16161b55 17px 22px,transparent 26px 37px);
+ transform:rotate(17deg);
+ animation:contact-spin 48s linear infinite;
+}
+.contact-planet:nth-child(3) .contact-world{
+ background:radial-gradient(circle at 25% 18%,#cacad1,#898991 22%,#33333d 53%,#060609 89%);
+}
+.contact-planet:nth-child(3) .contact-world:before{
+ background:repeating-linear-gradient(164deg,#ffffff06 0 14px,#f6f6f630 15px 18px,#0009 20px 24px,transparent 25px 37px);
+ transform:rotate(-18deg);
+ animation:contact-spin 55s linear infinite reverse;
+}
+.contact-planet:nth-child(4) .contact-world{
+ background:radial-gradient(circle at 21% 18%,#f0f0f3,#c5c5cc 19%,#81818d 43%,#262630 75%,#09090d 90%);
+}
+.contact-planet:nth-child(4) .contact-world:before{
+ background:radial-gradient(ellipse at 65% 25%,#fff9,transparent 28%),
+ radial-gradient(ellipse at 15% 75%,#2f3037b9,transparent 35%),
+ repeating-linear-gradient(30deg,#ffffff12 0 11px,transparent 13px 32px);
+ animation:contact-spin 65s linear infinite;
+}
+.contact-planet:nth-child(5) .contact-world{
+ background:radial-gradient(circle at 29% 24%,#a5a5ac,#5c5c65 33%,#282830 61%,#08080b 89%);
+}
+.contact-planet:nth-child(5) .contact-world:before{
+ background:radial-gradient(circle at 70% 70%,#050508 0 9px,#ffffff16 10px 14px,transparent 16px),
+ radial-gradient(circle at 22% 52%,#18181e 0 18px,transparent 21px),
+ repeating-linear-gradient(110deg,transparent 0 13px,#ffffff1b 14px 17px,#0006 19px 25px);
+ animation:contact-spin 42s linear infinite;
+}
+/* Rings belong to the planet links, not the clipped spherical discs. */
+.contact-planet:nth-child(2)::before{
+ content:"";position:absolute;top:39%;left:50%;width:115%;height:19%;
+ border:clamp(3px,.48vw,6px) solid #c7c7d1a3;border-left-color:#ffffff40;border-right-color:#4b4b53c9;
+ border-radius:50%;transform:translate(-50%,-50%) rotate(-26deg);
+ box-shadow:0 0 0 2px #ffffff13,0 0 19px #dcdce51a;pointer-events:none;z-index:2;
+}
+@media(min-width:761px){
+ .contact-orbits{display:block;height:clamp(550px,57vw,700px);max-width:1160px;margin:38px auto 45px}
+ .contact-orbits:before{content:"";position:absolute;inset:3% 9% 10% 8%;transform:none;border:1px solid #ffffff0e;border-radius:50%}
+ .contact-planet{position:absolute;width:clamp(150px,17vw,225px);gap:12px}
+ .contact-planet:nth-child(1){left:2%;top:12%;transform:rotate(-5deg)}
+ .contact-planet:nth-child(2){left:37%;top:3%;transform:rotate(7deg)}
+ .contact-planet:nth-child(3){left:75%;top:28%;transform:rotate(-7deg)}
+ .contact-planet:nth-child(4){left:18%;top:62%;transform:rotate(5deg)}
+ .contact-planet:nth-child(5){left:61%;top:70%;transform:rotate(-4deg)}
+ .contact-planet:nth-child(n):hover{transform:translateY(-9px) scale(1.045)}
+ .contact-planet:nth-child(1) .contact-world{width:clamp(112px,12vw,158px)}
+ .contact-planet:nth-child(2) .contact-world{width:clamp(136px,15vw,190px)}
+ .contact-planet:nth-child(3) .contact-world{width:clamp(142px,17vw,205px)}
+ .contact-planet:nth-child(4) .contact-world{width:clamp(104px,10vw,143px)}
+ .contact-planet:nth-child(5) .contact-world{width:clamp(120px,13vw,165px)}
+}
+@media(max-width:760px){
+ .contact-orbits{row-gap:35px}
+ .contact-planet:nth-child(1){transform:translateY(10px) rotate(-6deg)}
+ .contact-planet:nth-child(2){transform:translateY(-11px) rotate(7deg)}
+ .contact-planet:nth-child(3){transform:translateY(17px) rotate(-5deg)}
+ .contact-planet:nth-child(4){transform:translate(12px,-5px) rotate(5deg)}
+ .contact-planet:nth-child(5){transform:translate(-12px,16px) rotate(-7deg)}
+ .contact-planet:nth-child(n):hover{transform:translateY(-6px)}
+ .contact-planet:nth-child(2)::before{top:35%;width:115%;height:17%;border-width:3px}
+}
+@media(prefers-reduced-motion:reduce){
+ .contact-planet:nth-child(n) .contact-world:before{animation:none}
+}
+
 </style><style>
 .portfolio-preview{position:relative;padding:clamp(72px,9vw,140px) 6vw 110px;background:radial-gradient(ellipse at 70% 12%,#1a1b22,#050506 64%);color:#f4f4f5}
 .portfolio-preview-inner{max-width:1230px;margin:auto}
