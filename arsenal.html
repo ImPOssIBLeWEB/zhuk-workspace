@@ -172,19 +172,19 @@ function makeInterceptor(){
       const bar=new THREE.Mesh(new THREE.BoxGeometry(.11,.10,2.6),trim);
       bar.position.set(side*4,Math.cos(a)*1.6,Math.sin(a)*1.6);bar.rotation.x=a;g.add(bar)}
   }
-  g.scale.setScalar(.48);scene.add(g);return g;
+  g.scale.setScalar(1.15);scene.add(g);return g;
 }
 const interceptors=Array.from({length:8},()=>makeInterceptor());
 function updateInterceptors(time,now){
   interceptors.forEach((f,i)=>{
-    const start=7.25+i*.38, progress=Math.max(0,time-start);
+    const start=7.4+i*.42, progress=Math.max(0,time-start);
     f.visible=time>=start;
     if(!f.visible)return;
-    const out=ease(Math.min(1,progress/2.8));
+    const out=ease(Math.min(1,progress/3.0));
     // The hangar opens under the forward third of ZHUK WORKSPACE.
     const lane=i%2===0?-1:1, rank=Math.floor(i/2);
-    f.position.set(lane*(1.5+out*(10+rank*5)), -21+out*(2+rank*2.3), 14+out*(35+rank*9));
-    f.rotation.set(-.08+Math.sin(now*.001+i)*.04,lane*out*.12,lane*out*.16);
+    f.position.set(lane*(3+out*(11+rank*4)), -18+out*(10+rank*2), 26+out*(48+rank*5));
+    f.rotation.set(-.08+Math.sin(now*.001+i)*.04,lane*out*.19,lane*out*.16);
   });
 }
 const planet=new THREE.Mesh(new THREE.SphereGeometry(78,48,32),new THREE.MeshStandardMaterial({color:0x45454b,roughness:1,metalness:0,emissive:0x151519,emissiveIntensity:.4}));planet.position.set(130,-72,-220);scene.add(planet);
@@ -200,7 +200,7 @@ function animate(now){raf=requestAnimationFrame(animate);if(!active||document.hi
 const hyper=timeline>4.1&&timeline<5.35;streaks.visible=hyper;jump.classList.toggle('active',timeline>5.05&&timeline<5.25);
 ships.forEach((s,i)=>{const start=i===6?5.1:.6+i*.48;const duration=i===6?2.25:1.9;const t=ease((timeline-start)/duration);s.visible=t>0;s.position.copy(s.userData.target);s.position.z-= (1-t)*(i===6?430:240);s.position.y+=(1-t)*35;if(t>0)s.rotation.y=Math.sin(now*.00027+i)*.018;s.rotation.z=-.055+Math.sin(now*.00035+i)*.008;});
 updateInterceptors(timeline,now);
-if(timeline>12.7&&playing){playing=false;status.textContent='FLEET FORMATION COMPLETE / 07 VESSELS + 08 INTERCEPTORS'}
+if(timeline>14.2&&playing){playing=false;status.textContent='FLEET FORMATION COMPLETE / 07 VESSELS + 08 INTERCEPTORS'}
 if(!playing&&timeline===0)status.textContent='SELECT A VESSEL';
 camera.position.x=mix(camera.position.x,lookX,Math.min(1,dt*1.5));camera.position.y=mix(camera.position.y,(root.clientWidth<680?30:27)+lookY,Math.min(1,dt*1.5));camera.lookAt(0,0,0);
 planet.rotation.y+=dt*.008;renderer.render(scene,camera)}
