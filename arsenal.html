@@ -53,9 +53,60 @@ for(let i=-4;i<=4;i++){box(.38,.5,.9,dark,i*1.05,6.3,2.5,g);box(.3,.45,.75,panel
 for(let side of [-1,1]){box(1.25,1.4,3.2,dark,side*3.1,8.6,7.9,g);box(.8,.35,3.4,panel,side*2.9,9.7,7.8,g)}
 // Point the triangular bow toward the camera: rear engines face away.
 g.rotation.y=Math.PI;g.rotation.x=-.14;g.rotation.z=-.055;g.scale.setScalar(scale);scene.add(g);return g}
+
+// Executor-inspired flagship: broad armored dorsal hull with a long tapered prow.
+// Independent from the escort model so detailed GLB assets can replace it later.
+function createFlagship(){
+  const g=new THREE.Group();g.userData.name='ZHUK WORKSPACE';
+  const metal=new THREE.MeshStandardMaterial({color:0x747477,metalness:.92,roughness:.34,flatShading:true});
+  const recess=new THREE.MeshStandardMaterial({color:0x27272b,metalness:.85,roughness:.55});
+  const highlights=new THREE.MeshStandardMaterial({color:0xb0b0b5,metalness:.7,roughness:.4});
+  const windows=new THREE.MeshBasicMaterial({color:0xc8c8cd});
+  function addB(w,h,d,m,x,y,z){const q=new THREE.Mesh(new THREE.BoxGeometry(w,h,d),m);q.position.set(x,y,z);g.add(q);return q}
+  // Triangular footprint, bow at positive Z; heavily stretched compared with escorts.
+  function deck(width,len,y,thickness,material){
+    const sh=new THREE.Shape();sh.moveTo(0,len*.56);sh.lineTo(-width*.5,-len*.44);sh.lineTo(width*.5,-len*.44);sh.closePath();
+    const geo=new THREE.ExtrudeGeometry(sh,{depth:thickness,bevelEnabled:true,bevelSize:.55,bevelThickness:.25,bevelSegments:1});
+    geo.rotateX(-Math.PI/2);
+    const obj=new THREE.Mesh(geo,material);obj.position.y=y;g.add(obj);return obj;
+  }
+  deck(42,115,0,3,metal);deck(34,93,2.8,2,recess);deck(27,77,4.4,1.5,metal);
+  deck(18,59,5.7,1.1,highlights);
+  // Long central dorsal city, tiered bridge superstructures.
+  addB(8,2,70,recess,0,7,-8);addB(6,2,52,metal,0,9,-11);
+  for(let i=0;i<18;i++){
+    const z=-41+i*4.35;
+    const fraction=(z+48)/106;
+    const half=Math.max(2,20*(1-fraction));
+    for(const side of [-1,1]){
+      const x=side*half*.58;
+      addB(Math.max(1,half*.33),.8+(i%4)*.33,2.5,i%3===0?recess:metal,x,5.2,z);
+      addB(Math.max(.65,half*.22),.28,1.2,highlights,side*half*.84,5.6,z);
+      if(i%2===0)addB(.5,.25,2,windows,side*half*.54,6,z);
+    }
+  }
+  for(let i=0;i<23;i++){
+    const z=-47+i*3.7;
+    const span=Math.max(1.0,18-(z+42)*.17);
+    addB(1.8,.7,1.1,i%4===0?windows:recess,-span*.43,10.3,z);
+    addB(1.8,.7,1.1,i%3===0?windows:recess,span*.43,10.3,z);
+  }
+  // Embedded command spine rather than a tall toy-like tower.
+  for(let i=0;i<9;i++){const width=7.8-i*.58;addB(width,.64,4.8, i%2?metal:highlights,0,11.5+i*.58,-19+i*.9)}
+  addB(8,.9,1.2,recess,0,16.7,-12);
+  for(const side of [-1,1]){addB(2.2,1.6,3.4,metal,side*3.4,16,-12.5);addB(1.4,.4,3.3,highlights,side*3.5,17.1,-12.5)}
+  // Ion engines grouped along stern (negative Z), deliberately hidden behind the nose.
+  for(let i=-4;i<=4;i++){const rad=i===0?2.5:i%2===0?1.9:1.45;
+    const c=new THREE.Mesh(new THREE.CylinderGeometry(rad,rad,3.2,14),recess);
+    c.rotation.x=Math.PI/2;c.position.set(i*3.4,0,-53);g.add(c);
+    const lens=new THREE.Mesh(new THREE.CircleGeometry(rad*.83,18),windows);
+    lens.position.set(i*3.4,0,-55.1);lens.rotation.y=Math.PI;g.add(lens);
+  }
+  g.rotation.x=-.19;g.scale.setScalar(.93);scene.add(g);return g;
+}
 const data=[['CHATGPT','Интеллектуальный помощник: анализ, идеи, тексты и проектирование решений.'],['CODEX','Разработка программного обеспечения, работа с кодом и автоматизация задач.'],['VS CODE','Редактор и рабочая среда для разработки приложений и сайтов.'],['GITHUB','Репозитории, история изменений и совместная работа над проектами.'],['CLOUDFLARE','DNS, производительность и защита веб-инфраструктуры.'],['NETLIFY','Развёртывание и публикация современных веб-проектов.'],['ZHUK WORKSPACE','Флагман всей системы: объединяет технологии, дизайн и инженерный подход.']];
-const positions=[[-39,12,-20],[-18,3,-33],[20,10,-28],[43,1,-25],[-29,-17,6],[30,-16,0],[0,-2,14]];
-const ships=data.map((d,i)=>{let s=ship(d[0],i===6?1.95:.52);s.userData.index=i;s.userData.target=new THREE.Vector3(...positions[i]);s.position.copy(s.userData.target).add(new THREE.Vector3(0,0,-270));s.visible=false;return s});
+const positions=[[-39,12,-20],[-18,3,-33],[20,10,-28],[43,1,-25],[-29,-17,6],[30,-16,0],[0,-8,1]];
+const ships=data.map((d,i)=>{let s=i===6?createFlagship():ship(d[0],.52);s.userData.index=i;s.userData.target=new THREE.Vector3(...positions[i]);s.position.copy(s.userData.target).add(new THREE.Vector3(0,0,-270));s.visible=false;return s});
 const planet=new THREE.Mesh(new THREE.SphereGeometry(78,48,32),new THREE.MeshStandardMaterial({color:0x45454b,roughness:1,metalness:0,emissive:0x151519,emissiveIntensity:.4}));planet.position.set(130,-72,-220);scene.add(planet);
 const atmo=new THREE.Mesh(new THREE.SphereGeometry(80,48,32),new THREE.MeshBasicMaterial({color:0x77777d,transparent:true,opacity:.09,side:THREE.BackSide}));atmo.position.copy(planet.position);scene.add(atmo);
 const starGeo=new THREE.BufferGeometry(),stars=[];for(let i=0;i<1900;i++){stars.push((Math.random()-.5)*1100,(Math.random()-.5)*750,-Math.random()*900-60)}starGeo.setAttribute('position',new THREE.Float32BufferAttribute(stars,3));
@@ -67,7 +118,7 @@ function resize(){const w=root.clientWidth,h=root.clientHeight;if(!w||!h)return;
 function replay(){timeline=0;playing=true;detail.hidden=true;status.textContent='FLEET ARRIVAL / IN PROGRESS'}
 function animate(now){raf=requestAnimationFrame(animate);if(!active||document.hidden)return;const dt=Math.min(.05,(now-last)/1000||.016);last=now;if(playing&&!reduced)timeline+=dt;if(reduced)timeline=99;
 const hyper=timeline>4.1&&timeline<5.35;streaks.visible=hyper;jump.classList.toggle('active',timeline>5.05&&timeline<5.25);
-ships.forEach((s,i)=>{const start=i===6?5.1:.6+i*.48;const duration=i===6?2.25:1.9;const t=ease((timeline-start)/duration);s.visible=t>0;s.position.copy(s.userData.target);s.position.z-= (1-t)*(i===6?430:240);s.position.y+=(1-t)*35;if(t>0)s.rotation.y=Math.PI+Math.sin(now*.00027+i)*.018;s.rotation.z=-.055+Math.sin(now*.00035+i)*.008;});
+ships.forEach((s,i)=>{const start=i===6?5.1:.6+i*.48;const duration=i===6?2.25:1.9;const t=ease((timeline-start)/duration);s.visible=t>0;s.position.copy(s.userData.target);s.position.z-= (1-t)*(i===6?430:240);s.position.y+=(1-t)*35;if(t>0)s.rotation.y=(i===6?0:Math.PI)+Math.sin(now*.00027+i)*.018;s.rotation.z=-.055+Math.sin(now*.00035+i)*.008;});
 if(timeline>7.6&&playing){playing=false;status.textContent='FLEET FORMATION COMPLETE / 07 VESSELS'}
 if(!playing&&timeline===0)status.textContent='SELECT A VESSEL';
 camera.position.x=mix(camera.position.x,lookX,Math.min(1,dt*1.5));camera.position.y=mix(camera.position.y,(root.clientWidth<680?30:27)+lookY,Math.min(1,dt*1.5));camera.lookAt(0,0,0);
