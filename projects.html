@@ -63,6 +63,10 @@
      for(const [node,ru,en] of x.text)node.nodeValue=lang==='en'?en:ru;
      for(const [name,ru] of x.attrs)x.el.setAttribute(name,lang==='en'?translations[ru]:ru);
    }
+   document.querySelectorAll('img[alt]').forEach(img=>{
+     if(!img.dataset.ruAlt)img.dataset.ruAlt=img.alt;
+     img.alt=lang==='en'?img.dataset.ruAlt.replace(/, экран (\\d+)/,', screenshot $1').replace('Гидроизоляция НН','Waterproofing NN').replace(' — концептуальный лендинг',' — concept landing page').replace(' — тестовое задание',' — technical assignment'):img.dataset.ruAlt;
+   });
    document.querySelectorAll('.lang-switch button').forEach(b=>{
      const active=b.dataset.lang===lang;
      b.classList.toggle('active',active);b.setAttribute('aria-pressed',String(active));
