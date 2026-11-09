@@ -156,26 +156,31 @@ function updateInterceptors(time,now){
     f.rotation.set(-.08+Math.sin(now*.001+i)*.04,lane*out*.19,lane*out*.16);
   });
 }
-// Warm beige gas giant: subtle sand/ivory bands, kept away from the monochrome ships.
-const gasCanvas=document.createElement('canvas');gasCanvas.width=512;gasCanvas.height=256;
+// Golden sand gas giant: visible warm bands even through the far-space fog.
+// The planet must not inherit scene fog; at ~350 units the old fog almost erased it.
+const gasCanvas=document.createElement('canvas');gasCanvas.width=1024;gasCanvas.height=512;
 const gctx=gasCanvas.getContext('2d');
-const bands=['#b6a18a','#d7c3a8','#c4ab90','#e3d1b6','#ab947d','#d3baa0','#bba58c','#eee0c6'];
-for(let y=0;y<256;y++){
-  const turbulence=7*Math.sin(y*.095)+3*Math.sin(y*.27);
-  const bandIndex=Math.abs(Math.floor((y+turbulence)/22))%bands.length;
-  gctx.fillStyle=bands[bandIndex];gctx.fillRect(0,y,512,1);
+const bands=['#e2bc83','#c28b55','#f1d5a6','#d6a36b','#b47b49','#f0c996','#dfb17b','#a96f43','#eed6ad'];
+for(let y=0;y<512;y++){
+  const turbulence=9*Math.sin(y*.065)+4*Math.sin(y*.21);
+  const bandIndex=Math.abs(Math.floor((y+turbulence)/30))%bands.length;
+  gctx.fillStyle=bands[bandIndex];gctx.fillRect(0,y,1024,1);
 }
-for(let k=0;k<420;k++){
-  const x=(k*119.7)%512,y=(k*73.3)%256;
-  gctx.fillStyle=k%3===0?'#f3e7d31a':'#65524212';
-  gctx.beginPath();gctx.ellipse(x,y,13+(k%19)*2,1+(k%4),0,0,Math.PI*2);gctx.fill();
+// Soft atmospheric streaks and amber storms give depth to the sand bands.
+for(let k=0;k<640;k++){
+  const x=(k*127.7)%1024,y=(k*79.3)%512;
+  gctx.fillStyle=k%3===0?'#fff0d029':'#7e4a3022';
+  gctx.beginPath();gctx.ellipse(x,y,12+(k%22)*3,1+(k%4),0,0,Math.PI*2);gctx.fill();
 }
-const gasMap=new THREE.CanvasTexture(gasCanvas);gasMap.colorSpace=THREE.SRGBColorSpace;
+const gasMap=new THREE.CanvasTexture(gasCanvas);
+gasMap.colorSpace=THREE.SRGBColorSpace;
+gasMap.wrapS=THREE.RepeatWrapping;gasMap.anisotropy=Math.min(renderer.capabilities.getMaxAnisotropy(),8);
 const planet=new THREE.Mesh(new THREE.SphereGeometry(78,64,48),
-  new THREE.MeshStandardMaterial({map:gasMap,color:0xe6d5c0,roughness:1,metalness:0,emissive:0x2b2018,emissiveIntensity:.12}));
+  new THREE.MeshBasicMaterial({map:gasMap,color:0xffffff,fog:false}));
 planet.position.set(130,-72,-220);scene.add(planet);
+// Thin golden atmospheric halo; keeps the colour without overpowering the ships.
 const atmo=new THREE.Mesh(new THREE.SphereGeometry(80,48,32),
-  new THREE.MeshBasicMaterial({color:0xb89c83,transparent:true,opacity:.12,side:THREE.BackSide}));
+  new THREE.MeshBasicMaterial({color:0xd8ad75,transparent:true,opacity:.12,side:THREE.BackSide,depthWrite:false,fog:false}));
 atmo.position.copy(planet.position);scene.add(atmo);
 const starGeo=new THREE.BufferGeometry(),stars=[];for(let i=0;i<1900;i++){stars.push((Math.random()-.5)*1100,(Math.random()-.5)*750,-Math.random()*900-60)}starGeo.setAttribute('position',new THREE.Float32BufferAttribute(stars,3));
 const starMat=new THREE.PointsMaterial({color:0xe7e7ed,size:1.18,sizeAttenuation:true,transparent:true,opacity:.8});const starField=new THREE.Points(starGeo,starMat);scene.add(starField);
