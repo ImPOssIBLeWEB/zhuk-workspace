@@ -1,37 +1,37 @@
-<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#03040a"><title>MY ARSENAL — ZHUK WARSPACE</title><style>
+<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#03040a"><title>MY ARSENAL — ZHUK WORKSPACE</title><style>
 @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&family=Unbounded:wght@500;700;900&display=swap');
-*{box-sizing:border-box}html,body{margin:0;background:#02030a;color:#f2f5ff;font-family:Manrope,Arial,sans-serif}body{overflow-x:hidden}
-#arsenal{position:relative;min-height:100svh;overflow:hidden;background:radial-gradient(ellipse at 70% 45%,#14223e 0%,#03050c 47%,#010208 85%)}
+*{box-sizing:border-box}html,body{margin:0;background:#030305;color:#f6f6f6;font-family:Manrope,Arial,sans-serif}body{overflow-x:hidden}
+#arsenal{position:relative;min-height:100svh;overflow:hidden;background:radial-gradient(ellipse at 70% 45%,#222228 0%,#09090b 47%,#030305 85%)}
 #fleet{position:absolute;inset:0;width:100%;height:100%;display:block;touch-action:pan-y}
-.shade{position:absolute;inset:0;pointer-events:none;background:linear-gradient(90deg,#02030be8 0%,#02030b4a 38%,transparent 70%),linear-gradient(0deg,#02030bdf 0%,transparent 27%,transparent 77%,#02030b88)}
-.header{position:relative;pointer-events:none;z-index:2;padding:clamp(26px,6vw,72px);max-width:650px}
-.kicker{font-size:11px;letter-spacing:.32em;color:#93b7e8;font-weight:800;text-transform:uppercase}
-h1{font:900 clamp(2.4rem,6.4vw,6.4rem)/1.04 Unbounded,sans-serif;letter-spacing:-.07em;margin:22px 0 24px}
-h1 span{display:block;color:#a0b5df}.intro{font-size:clamp(12px,1.4vw,16px);line-height:1.8;color:#b3c1d8;max-width:480px}
-.legend{margin-top:24px;font-size:11px;color:#91a6cb;letter-spacing:.12em}
+.shade{position:absolute;inset:0;pointer-events:none;background:linear-gradient(180deg,#030305bc 0%,#03030520 28%,transparent 65%,#030305d9 100%)}
+.header{position:relative;pointer-events:none;z-index:2;padding:clamp(26px,5vw,60px) 22px 0;max-width:900px;margin:0 auto;text-align:center}
+.kicker{display:none}
+h1{font:900 clamp(2.1rem,5.5vw,5.6rem)/1.1 Unbounded,sans-serif;letter-spacing:-.065em;margin:0 0 15px;white-space:nowrap;text-shadow:0 4px 28px #030305}
+.intro{font-size:clamp(12px,1.25vw,15px);line-height:1.7;color:#c1c1c8;max-width:540px;margin:0 auto}
+.legend{margin-top:24px;font-size:11px;color:#b0b0b6;letter-spacing:.12em}
 .control{position:absolute;bottom:34px;left:clamp(25px,6vw,72px);z-index:3;display:flex;gap:10px;flex-wrap:wrap}
-.control button,.detail button{border:1px solid #7696c280;background:#0d1730bc;color:white;padding:13px 18px;font-weight:800;font-size:11px;letter-spacing:.12em;cursor:pointer;transition:background .2s}
-.control button:hover,.detail button:hover{background:#27406a}.control button:focus-visible,.detail button:focus-visible{outline:2px solid white}
-.status{position:absolute;right:28px;bottom:38px;z-index:2;font-size:10px;color:#92a7c9;letter-spacing:.15em;text-align:right;pointer-events:none}
-.detail{position:absolute;z-index:5;right:4%;top:50%;transform:translateY(-50%);width:min(350px,88vw);padding:28px;border:1px solid #7b9bd866;background:#050b19e9;backdrop-filter:blur(18px);box-shadow:0 20px 80px #000a}
-.detail[hidden]{display:none}.detail small{color:#92b8ef;letter-spacing:.25em}.detail h2{font:700 22px Unbounded,sans-serif;letter-spacing:-.04em;margin:19px 0}.detail p{font-size:13px;line-height:1.8;color:#c7d3e6}.detail .close{float:right;padding:6px 10px}
-.jump{position:absolute;inset:0;z-index:4;pointer-events:none;opacity:0;background:radial-gradient(ellipse at 58% 50%,#fff 0%,#c5e0ff 8%,#6ba2ec77 15%,transparent 42%);transition:opacity .28s}.jump.active{opacity:1}
-.fallback{display:none;position:absolute;inset:0;background:radial-gradient(circle at 70% 60%,#263f6b,#060a16 44%,#02030a);padding:45vh 10% 0 10%;color:#baccec}
-@media(max-width:700px){.shade{background:linear-gradient(180deg,#02030bf0 0%,#02030b55 43%,#02030b99 100%)}.header{padding:36px 24px;max-width:410px}h1{font-size:clamp(2rem,9vw,3.6rem)}.intro{max-width:320px}.control{bottom:30px;left:22px}.status{display:none}.detail{right:5%;top:56%}.legend{display:none}}
+.control button,.detail button{border:1px solid #ffffff80;background:#101013c9;color:white;padding:13px 18px;font-weight:800;font-size:11px;letter-spacing:.12em;cursor:pointer;transition:background .2s}
+.control button:hover,.detail button:hover{background:#45454a}.control button:focus-visible,.detail button:focus-visible{outline:2px solid white}
+.status{position:absolute;right:28px;bottom:38px;z-index:2;font-size:10px;color:#babac0;letter-spacing:.15em;text-align:right;pointer-events:none}
+.detail{position:absolute;z-index:5;right:4%;top:50%;transform:translateY(-50%);width:min(350px,88vw);padding:28px;border:1px solid #ffffff66;background:#0a0a0ee9;backdrop-filter:blur(18px);box-shadow:0 20px 80px #000a}
+.detail[hidden]{display:none}.detail small{color:#e0e0e0;letter-spacing:.25em}.detail h2{font:700 22px Unbounded,sans-serif;letter-spacing:-.04em;margin:19px 0}.detail p{font-size:13px;line-height:1.8;color:#d0d0d4}.detail .close{float:right;padding:6px 10px}
+.jump{position:absolute;inset:0;z-index:4;pointer-events:none;opacity:0;background:radial-gradient(ellipse at 58% 50%,#fff 0%,#e5e5eb 8%,#b8b8c077 15%,transparent 42%);transition:opacity .28s}.jump.active{opacity:1}
+.fallback{display:none;position:absolute;inset:0;background:radial-gradient(circle at 70% 60%,#45454d,#121215 44%,#030305);padding:45vh 10% 0 10%;color:#ccc}
+@media(max-width:700px){.shade{background:linear-gradient(180deg,#030305f0 0%,#03030550 43%,#030305a8 100%)}.header{padding:32px 18px;max-width:100%}h1{font-size:clamp(1.8rem,7vw,3.3rem)}.intro{max-width:360px}.control{bottom:30px;left:22px}.status{display:none}.detail{right:5%;top:56%}.legend{display:none}}
 @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}
-</style></head><body><main id="arsenal" aria-label="My Arsenal — 3D fleet"><canvas id="fleet" aria-label="Интерактивный космический флот"></canvas><div class="shade"></div><header class="header"><div class="kicker">03 / Technologies in formation</div><h1>MY <span>ARSENAL</span></h1><p class="intro" id="intro">Шесть кораблей технологий сопровождают флагман ZHUK WARSPACE. Выберите корабль, чтобы узнать, что находится на его борту.</p><div class="legend">DRAG TO LOOK · CLICK A SHIP · WATCH THE JUMP</div></header>
-<div class="control"><button id="replay" type="button">↻ REPLAY ARRIVAL</button><button id="overview" type="button">◈ FLEET OVERVIEW</button></div><div class="status" id="status">ZHUK WARSPACE // FLEET INITIALIZING</div><div class="jump" id="jump"></div><aside id="detail" class="detail" hidden><button id="close" class="close" aria-label="Закрыть">✕</button><small>FLEET DATABASE / ACTIVE</small><h2 id="detail-title"></h2><p id="detail-copy"></p><button id="back">← RETURN TO FLEET</button></aside><div id="fallback" class="fallback">WebGL недоступен. Арсенал: ChatGPT · Codex · VS Code · GitHub · Cloudflare · Netlify.</div></main>
+</style></head><body><main id="arsenal" aria-label="My Arsenal — 3D fleet"><canvas id="fleet" aria-label="Интерактивный космический флот"></canvas><div class="shade"></div><header class="header"><div class="kicker"></div><h1>MY ARSENAL</h1><p class="intro" id="intro">Мой инструментарий разработки: каждый корабль представляет технологию, а флагман объединяет весь арсенал.</p><div class="legend">DRAG TO LOOK · CLICK A SHIP · WATCH THE JUMP</div></header>
+<div class="control"><button id="replay" type="button">↻ REPLAY ARRIVAL</button><button id="overview" type="button">◈ FLEET OVERVIEW</button></div><div class="status" id="status">ZHUK WORKSPACE // FLEET INITIALIZING</div><div class="jump" id="jump"></div><aside id="detail" class="detail" hidden><button id="close" class="close" aria-label="Закрыть">✕</button><small>FLEET DATABASE / ACTIVE</small><h2 id="detail-title"></h2><p id="detail-copy"></p><button id="back">← RETURN TO FLEET</button></aside><div id="fallback" class="fallback">WebGL недоступен. Арсенал: ChatGPT · Codex · VS Code · GitHub · Cloudflare · Netlify.</div></main>
 <script type="module">
 import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.160.1/build/three.module.js';
 const root=document.getElementById('arsenal'),canvas=document.getElementById('fleet'),status=document.getElementById('status'),detail=document.getElementById('detail'),jump=document.getElementById('jump');
 let renderer;try{renderer=new THREE.WebGLRenderer({canvas,antialias:innerWidth>680,alpha:true,powerPreference:'default'});}catch(e){document.getElementById('fallback').style.display='block';throw e}
 renderer.setPixelRatio(Math.min(devicePixelRatio||1,1.7));renderer.setClearColor(0x000000,0);
-const scene=new THREE.Scene();scene.fog=new THREE.FogExp2(0x02040d,.008);
+const scene=new THREE.Scene();scene.fog=new THREE.FogExp2(0x040406,.006);
 const camera=new THREE.PerspectiveCamera(46,1,.1,1500);camera.position.set(0,27,135);camera.lookAt(0,0,0);
-scene.add(new THREE.AmbientLight(0x92acd8,1.25));
-const key=new THREE.DirectionalLight(0xa7c9ff,3.1);key.position.set(-35,70,80);scene.add(key);
-const rim=new THREE.DirectionalLight(0x486ba6,2);rim.position.set(20,-9,-45);scene.add(rim);
-const cyan=new THREE.MeshBasicMaterial({color:0x56caff});const steel=new THREE.MeshStandardMaterial({color:0x6d7c93,metalness:.78,roughness:.38,flatShading:true});const dark=new THREE.MeshStandardMaterial({color:0x222d40,metalness:.85,roughness:.3});const panel=new THREE.MeshStandardMaterial({color:0x8996ab,metalness:.8,roughness:.42,flatShading:true});
+scene.add(new THREE.AmbientLight(0xc8c8ce,1.05));
+const key=new THREE.DirectionalLight(0xffffff,3.1);key.position.set(-35,70,80);scene.add(key);
+const rim=new THREE.DirectionalLight(0x85858c,1.7);rim.position.set(20,-9,-45);scene.add(rim);
+const cyan=new THREE.MeshBasicMaterial({color:0xc9d5e0});const steel=new THREE.MeshStandardMaterial({color:0x6b6b70,metalness:.78,roughness:.38,flatShading:true});const dark=new THREE.MeshStandardMaterial({color:0x29292d,metalness:.85,roughness:.3});const panel=new THREE.MeshStandardMaterial({color:0x98989d,metalness:.8,roughness:.42,flatShading:true});
 function box(w,h,d,mat,x=0,y=0,z=0,parent){const m=new THREE.Mesh(new THREE.BoxGeometry(w,h,d),mat);m.position.set(x,y,z);(parent||scene).add(m);return m}
 function ship(name,scale=1){const g=new THREE.Group();g.userData.name=name;
 const shape=new THREE.Shape();shape.moveTo(0,-26);shape.lineTo(-17,18);shape.lineTo(17,18);shape.closePath();
@@ -41,22 +41,33 @@ const core=box(11,2,20,panel,0,3.5,1,g);core.rotation.y=Math.PI;
 box(6,4,12,dark,0,6,4,g);box(5,2.5,5,steel,0,9,8,g);box(11,1.5,2,panel,0,10,8,g);
 for(let i=-1;i<=1;i++){let engine=new THREE.Mesh(new THREE.CylinderGeometry(1.65,1.65,2,12),dark);engine.rotation.x=Math.PI/2;engine.position.set(i*5,-.2,18);g.add(engine);let glow=new THREE.Mesh(new THREE.CircleGeometry(1.34,16),cyan);glow.position.set(i*5,-.2,19.1);glow.rotation.y=Math.PI;g.add(glow)}
 for(let i=0;i<9;i++){const zz=12-i*3;const width=15-i*1.5;for(const side of [-1,1]){let strip=box(.35,.22,1.4,i%3?panel:cyan,side*width*.48,2.2,zz,g);strip.rotation.y=side*.1}}
-g.rotation.x=-.14;g.rotation.z=-.055;g.scale.setScalar(scale);scene.add(g);return g}
-const data=[['CHATGPT','Интеллектуальный помощник: анализ, идеи, тексты и проектирование решений.'],['CODEX','Разработка программного обеспечения, работа с кодом и автоматизация задач.'],['VS CODE','Редактор и рабочая среда для разработки приложений и сайтов.'],['GITHUB','Репозитории, история изменений и совместная работа над проектами.'],['CLOUDFLARE','DNS, производительность и защита веб-инфраструктуры.'],['NETLIFY','Развёртывание и публикация современных веб-проектов.'],['ZHUK WARSPACE','Флагман всей системы: объединяет технологии, дизайн и инженерный подход.']];
+// Detailed armor plating, trench lighting and recessed surface structures.
+for(let row=0;row<11;row++){const z=-19+row*3.0;const half=3.2+(row/10)*11.5;
+ for(const side of [-1,1]){for(let p=0;p<2;p++){
+ const plate=box(half*.22,.12,1.2,(row+p)%4===0?dark:panel,side*(half*(.34+p*.24)),2.35,z,g);
+ plate.rotation.y=side*.03;
+ }
+ if(row%2===0){const trench=box(.27,.18,2.1,dark,side*half*.75,2.45,z,g);trench.rotation.y=side*.06}
+ }}
+for(let i=-4;i<=4;i++){box(.38,.5,.9,dark,i*1.05,6.3,2.5,g);box(.3,.45,.75,panel,i*.92,7,7.5,g)}
+for(let side of [-1,1]){box(1.25,1.4,3.2,dark,side*3.1,8.6,7.9,g);box(.8,.35,3.4,panel,side*2.9,9.7,7.8,g)}
+// Point the triangular bow toward the camera: rear engines face away.
+g.rotation.y=Math.PI;g.rotation.x=-.14;g.rotation.z=-.055;g.scale.setScalar(scale);scene.add(g);return g}
+const data=[['CHATGPT','Интеллектуальный помощник: анализ, идеи, тексты и проектирование решений.'],['CODEX','Разработка программного обеспечения, работа с кодом и автоматизация задач.'],['VS CODE','Редактор и рабочая среда для разработки приложений и сайтов.'],['GITHUB','Репозитории, история изменений и совместная работа над проектами.'],['CLOUDFLARE','DNS, производительность и защита веб-инфраструктуры.'],['NETLIFY','Развёртывание и публикация современных веб-проектов.'],['ZHUK WORKSPACE','Флагман всей системы: объединяет технологии, дизайн и инженерный подход.']];
 const positions=[[-39,12,-20],[-18,3,-33],[20,10,-28],[43,1,-25],[-29,-17,6],[30,-16,0],[0,-2,14]];
 const ships=data.map((d,i)=>{let s=ship(d[0],i===6?1.95:.52);s.userData.index=i;s.userData.target=new THREE.Vector3(...positions[i]);s.position.copy(s.userData.target).add(new THREE.Vector3(0,0,-270));s.visible=false;return s});
-const planet=new THREE.Mesh(new THREE.SphereGeometry(78,48,32),new THREE.MeshStandardMaterial({color:0x1e3357,roughness:1,metalness:0,emissive:0x0c1c32,emissiveIntensity:.4}));planet.position.set(130,-72,-220);scene.add(planet);
-const atmo=new THREE.Mesh(new THREE.SphereGeometry(80,48,32),new THREE.MeshBasicMaterial({color:0x3763ac,transparent:true,opacity:.09,side:THREE.BackSide}));atmo.position.copy(planet.position);scene.add(atmo);
+const planet=new THREE.Mesh(new THREE.SphereGeometry(78,48,32),new THREE.MeshStandardMaterial({color:0x45454b,roughness:1,metalness:0,emissive:0x151519,emissiveIntensity:.4}));planet.position.set(130,-72,-220);scene.add(planet);
+const atmo=new THREE.Mesh(new THREE.SphereGeometry(80,48,32),new THREE.MeshBasicMaterial({color:0x77777d,transparent:true,opacity:.09,side:THREE.BackSide}));atmo.position.copy(planet.position);scene.add(atmo);
 const starGeo=new THREE.BufferGeometry(),stars=[];for(let i=0;i<1900;i++){stars.push((Math.random()-.5)*1100,(Math.random()-.5)*750,-Math.random()*900-60)}starGeo.setAttribute('position',new THREE.Float32BufferAttribute(stars,3));
-const starMat=new THREE.PointsMaterial({color:0xc9dfff,size:1.18,sizeAttenuation:true,transparent:true,opacity:.8});const starField=new THREE.Points(starGeo,starMat);scene.add(starField);
-const lines=[];let streaks=new THREE.Group();scene.add(streaks);const lineMat=new THREE.LineBasicMaterial({color:0x91bfff,transparent:true,opacity:.85});for(let i=0;i<110;i++){const x=(Math.random()-.5)*240,y=(Math.random()-.5)*160,z=-70-Math.random()*160;const geo=new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(x,y,z),new THREE.Vector3(x*1.2,y*1.2,z+90)]);const line=new THREE.Line(geo,lineMat);streaks.add(line);lines.push(line)}streaks.visible=false;
+const starMat=new THREE.PointsMaterial({color:0xe7e7ed,size:1.18,sizeAttenuation:true,transparent:true,opacity:.8});const starField=new THREE.Points(starGeo,starMat);scene.add(starField);
+const lines=[];let streaks=new THREE.Group();scene.add(streaks);const lineMat=new THREE.LineBasicMaterial({color:0xe3e3ed,transparent:true,opacity:.85});for(let i=0;i<110;i++){const x=(Math.random()-.5)*240,y=(Math.random()-.5)*160,z=-70-Math.random()*160;const geo=new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(x,y,z),new THREE.Vector3(x*1.2,y*1.2,z+90)]);const line=new THREE.Line(geo,lineMat);streaks.add(line);lines.push(line)}streaks.visible=false;
 const ray=new THREE.Raycaster(),mouse=new THREE.Vector2();let timeline=0,playing=false,active=false,last=0,raf=0,lookX=0,lookY=0,drag=false,sx=0,sy=0,reduced=matchMedia('(prefers-reduced-motion:reduce)').matches;
 function ease(t){return 1-Math.pow(1-Math.max(0,Math.min(1,t)),3)}function mix(a,b,t){return a+(b-a)*t}
 function resize(){const w=root.clientWidth,h=root.clientHeight;if(!w||!h)return;renderer.setSize(w,h,false);camera.aspect=w/h;camera.fov=w<680?63:46;camera.position.z=w<680?190:135;camera.updateProjectionMatrix()}
 function replay(){timeline=0;playing=true;detail.hidden=true;status.textContent='FLEET ARRIVAL / IN PROGRESS'}
 function animate(now){raf=requestAnimationFrame(animate);if(!active||document.hidden)return;const dt=Math.min(.05,(now-last)/1000||.016);last=now;if(playing&&!reduced)timeline+=dt;if(reduced)timeline=99;
 const hyper=timeline>4.1&&timeline<5.35;streaks.visible=hyper;jump.classList.toggle('active',timeline>5.05&&timeline<5.25);
-ships.forEach((s,i)=>{const start=i===6?5.1:.6+i*.48;const duration=i===6?2.25:1.9;const t=ease((timeline-start)/duration);s.visible=t>0;s.position.copy(s.userData.target);s.position.z-= (1-t)*(i===6?430:240);s.position.y+=(1-t)*35;if(t>0)s.rotation.y=Math.sin(now*.00027+i)*.018;s.rotation.z=-.055+Math.sin(now*.00035+i)*.008;});
+ships.forEach((s,i)=>{const start=i===6?5.1:.6+i*.48;const duration=i===6?2.25:1.9;const t=ease((timeline-start)/duration);s.visible=t>0;s.position.copy(s.userData.target);s.position.z-= (1-t)*(i===6?430:240);s.position.y+=(1-t)*35;if(t>0)s.rotation.y=Math.PI+Math.sin(now*.00027+i)*.018;s.rotation.z=-.055+Math.sin(now*.00035+i)*.008;});
 if(timeline>7.6&&playing){playing=false;status.textContent='FLEET FORMATION COMPLETE / 07 VESSELS'}
 if(!playing&&timeline===0)status.textContent='SELECT A VESSEL';
 camera.position.x=mix(camera.position.x,lookX,Math.min(1,dt*1.5));camera.position.y=mix(camera.position.y,(root.clientWidth<680?30:27)+lookY,Math.min(1,dt*1.5));camera.lookAt(0,0,0);
