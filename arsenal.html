@@ -65,14 +65,14 @@ function ship(name,scale=1){
  topDeck(11,-17,1,7.7,1.8,dark);
  topDeck(8,-17,-2,9.4,1.6,panel);
  // Neck and iconic wide bridge with twin sensor spheres.
- box(4.3,6.4,5.5,steel,0,13,-12,g);
- box(15,2.5,5.3,panel,0,17,-12,g);
- box(16.6,.9,5.7,dark,0,18.5,-12,g);
+ box(4.3,4.8,5.5,steel,0,11.4,-12,g);
+ box(15,2.1,5.3,panel,0,14.8,-12,g);
+ box(16.6,.75,5.7,dark,0,16.2,-12,g);
  for(const side of [-1,1]){
-   box(1.1,2.3,1.3,steel,side*6.2,20,-12,g);
+   box(1.1,1.65,1.3,steel,side*6.2,17.5,-12,g);
    const dome=new THREE.Mesh(new THREE.SphereGeometry(1.85,12,9),panel);
-   dome.position.set(side*6.2,22.2,-12);g.add(dome);
-   const neck=box(.8,1.3,1.1,dark,side*6.2,20.3,-12,g);
+   dome.position.set(side*6.2,19.2,-12);g.add(dome);
+   const neck=box(.8,1.0,1.1,dark,side*6.2,17.4,-12,g);
  }
  // Surface plating: restrained tonal relief, dark gaps, window strips.
  for(let row=0;row<23;row++){
@@ -103,58 +103,27 @@ function ship(name,scale=1){
  }
  g.rotation.x=-.14;g.rotation.z=-.055;g.scale.setScalar(scale);scene.add(g);return g;
 }
-// Executor-inspired flagship: broad armored dorsal hull with a long tapered prow.
-// Independent from the escort model so detailed GLB assets can replace it later.
+// Flagship shares the exact Imperial-inspired destroyer hull and bridge geometry.
 function createFlagship(){
-  const g=new THREE.Group();g.userData.name='ZHUK WORKSPACE';
-  const metal=new THREE.MeshStandardMaterial({color:0x747477,metalness:.92,roughness:.34,flatShading:true});
-  const recess=new THREE.MeshStandardMaterial({color:0x27272b,metalness:.85,roughness:.55});
-  const highlights=new THREE.MeshStandardMaterial({color:0xb0b0b5,metalness:.7,roughness:.4});
-  const windows=new THREE.MeshBasicMaterial({color:0xc8c8cd});
-  function addB(w,h,d,m,x,y,z){const q=new THREE.Mesh(new THREE.BoxGeometry(w,h,d),m);q.position.set(x,y,z);g.add(q);return q}
-  // Triangular footprint, bow at positive Z; heavily stretched compared with escorts.
-  function deck(width,len,y,thickness,material){
-    const sh=new THREE.Shape();sh.moveTo(0,len*.56);sh.lineTo(-width*.5,-len*.44);sh.lineTo(width*.5,-len*.44);sh.closePath();
-    const geo=new THREE.ExtrudeGeometry(sh,{depth:thickness,bevelEnabled:true,bevelSize:.55,bevelThickness:.25,bevelSegments:1});
-    geo.rotateX(-Math.PI/2);
-    const obj=new THREE.Mesh(geo,material);obj.position.y=y;g.add(obj);return obj;
-  }
-  deck(42,115,0,3,metal);deck(34,93,2.8,2,recess);deck(27,77,4.4,1.5,metal);
-  deck(18,59,5.7,1.1,highlights);
-  // Long central dorsal city, tiered bridge superstructures.
-  addB(8,2,70,recess,0,7,-8);addB(6,2,52,metal,0,9,-11);
-  for(let i=0;i<18;i++){
-    const z=-41+i*4.35;
-    const fraction=(z+48)/106;
-    const half=Math.max(2,20*(1-fraction));
+  const flagship=ship('ZHUK WORKSPACE',1);
+  // A longer, larger command destroyer, not a separate Executor-style silhouette.
+  flagship.scale.set(1.36,1.29,1.49);
+  const armor=new THREE.MeshStandardMaterial({color:0x77777b,metalness:.85,roughness:.45,flatShading:true});
+  const recess=new THREE.MeshStandardMaterial({color:0x343438,metalness:.78,roughness:.53});
+  // Fine low-profile armor on the existing dorsal wedge.
+  for(let row=0;row<18;row++){
+    const z=-17+row*2.55;
+    const width=Math.max(2,19*(30-z)/53);
     for(const side of [-1,1]){
-      const x=side*half*.58;
-      addB(Math.max(1,half*.33),.8+(i%4)*.33,2.5,i%3===0?recess:metal,x,5.2,z);
-      addB(Math.max(.65,half*.22),.28,1.2,highlights,side*half*.84,5.6,z);
-      if(i%2===0)addB(.5,.25,2,windows,side*half*.54,6,z);
+      const x=side*width*.42;
+      box(Math.max(.7,width*.18),.13,1.25,row%4===0?recess:armor,x,3.38,z,flagship);
     }
   }
-  for(let i=0;i<23;i++){
-    const z=-47+i*3.7;
-    const span=Math.max(1.0,18-(z+42)*.17);
-    addB(1.8,.7,1.1,i%4===0?windows:recess,-span*.43,10.3,z);
-    addB(1.8,.7,1.1,i%3===0?windows:recess,span*.43,10.3,z);
-  }
-  // Embedded command spine rather than a tall toy-like tower.
-  for(let i=0;i<9;i++){const width=7.8-i*.58;addB(width,.64,4.8, i%2?metal:highlights,0,11.5+i*.58,-19+i*.9)}
-  addB(8,.9,1.2,recess,0,16.7,-12);
-  for(const side of [-1,1]){addB(2.2,1.6,3.4,metal,side*3.4,16,-12.5);addB(1.4,.4,3.3,highlights,side*3.5,17.1,-12.5)}
-  // Ion engines grouped along stern (negative Z), deliberately hidden behind the nose.
-  for(let i=-4;i<=4;i++){const rad=i===0?2.5:i%2===0?1.9:1.45;
-    const c=new THREE.Mesh(new THREE.CylinderGeometry(rad,rad,3.2,14),recess);
-    c.rotation.x=Math.PI/2;c.position.set(i*3.4,0,-53);g.add(c);
-    const lens=new THREE.Mesh(new THREE.CircleGeometry(rad*.83,18),windows);
-    lens.position.set(i*3.4,0,-55.1);lens.rotation.y=Math.PI;g.add(lens);
-  }
-  g.rotation.x=-.19;g.scale.setScalar(.93);scene.add(g);return g;
+  flagship.rotation.x=-.14;
+  return flagship;
 }
 const data=[['CHATGPT','Интеллектуальный помощник: анализ, идеи, тексты и проектирование решений.'],['CODEX','Разработка программного обеспечения, работа с кодом и автоматизация задач.'],['VS CODE','Редактор и рабочая среда для разработки приложений и сайтов.'],['GITHUB','Репозитории, история изменений и совместная работа над проектами.'],['CLOUDFLARE','DNS, производительность и защита веб-инфраструктуры.'],['NETLIFY','Развёртывание и публикация современных веб-проектов.'],['ZHUK WORKSPACE','Флагман всей системы: объединяет технологии, дизайн и инженерный подход.']];
-const positions=[[-39,12,-20],[-18,3,-33],[20,10,-28],[43,1,-25],[-29,-17,6],[30,-16,0],[0,-8,1]];
+const positions=[[-39,0,-20],[-18,-7,-33],[20,-3,-28],[43,-8,-25],[-29,-20,6],[30,-21,0],[0,-12,1]];
 const ships=data.map((d,i)=>{let s=i===6?createFlagship():ship(d[0],.52);s.userData.index=i;s.userData.target=new THREE.Vector3(...positions[i]);s.position.copy(s.userData.target).add(new THREE.Vector3(0,0,-270));s.visible=false;return s});
 // Lightweight twin-panel interceptors deployed from the flagship's ventral hangar.
 function makeInterceptor(){
@@ -172,7 +141,7 @@ function makeInterceptor(){
       const bar=new THREE.Mesh(new THREE.BoxGeometry(.11,.10,2.6),trim);
       bar.position.set(side*4,Math.cos(a)*1.6,Math.sin(a)*1.6);bar.rotation.x=a;g.add(bar)}
   }
-  g.scale.setScalar(1.15);scene.add(g);return g;
+  g.scale.setScalar(.38);scene.add(g);return g;
 }
 const interceptors=Array.from({length:8},()=>makeInterceptor());
 function updateInterceptors(time,now){
@@ -183,7 +152,7 @@ function updateInterceptors(time,now){
     const out=ease(Math.min(1,progress/3.0));
     // The hangar opens under the forward third of ZHUK WORKSPACE.
     const lane=i%2===0?-1:1, rank=Math.floor(i/2);
-    f.position.set(lane*(3+out*(11+rank*4)), -18+out*(10+rank*2), 26+out*(48+rank*5));
+    f.position.set(lane*(1.5+out*(8+rank*3)), -23+out*(6+rank*1.5), 23+out*(41+rank*5));
     f.rotation.set(-.08+Math.sin(now*.001+i)*.04,lane*out*.19,lane*out*.16);
   });
 }
