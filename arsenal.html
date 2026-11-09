@@ -107,6 +107,37 @@ function createFlagship(){
 const data=[['CHATGPT','Интеллектуальный помощник: анализ, идеи, тексты и проектирование решений.'],['CODEX','Разработка программного обеспечения, работа с кодом и автоматизация задач.'],['VS CODE','Редактор и рабочая среда для разработки приложений и сайтов.'],['GITHUB','Репозитории, история изменений и совместная работа над проектами.'],['CLOUDFLARE','DNS, производительность и защита веб-инфраструктуры.'],['NETLIFY','Развёртывание и публикация современных веб-проектов.'],['ZHUK WORKSPACE','Флагман всей системы: объединяет технологии, дизайн и инженерный подход.']];
 const positions=[[-39,12,-20],[-18,3,-33],[20,10,-28],[43,1,-25],[-29,-17,6],[30,-16,0],[0,-8,1]];
 const ships=data.map((d,i)=>{let s=i===6?createFlagship():ship(d[0],.52);s.userData.index=i;s.userData.target=new THREE.Vector3(...positions[i]);s.position.copy(s.userData.target).add(new THREE.Vector3(0,0,-270));s.visible=false;return s});
+// Lightweight twin-panel interceptors deployed from the flagship's ventral hangar.
+function makeInterceptor(){
+  const g=new THREE.Group();
+  const shell=new THREE.MeshStandardMaterial({color:0x8c8c91,metalness:.78,roughness:.38,flatShading:true});
+  const wing=new THREE.MeshStandardMaterial({color:0x17171b,metalness:.44,roughness:.65,flatShading:true,side:THREE.DoubleSide});
+  const trim=new THREE.MeshStandardMaterial({color:0xb6b6ba,metalness:.78,roughness:.35});
+  const cockpit=new THREE.Mesh(new THREE.SphereGeometry(1.35,12,9),shell);g.add(cockpit);
+  const glass=new THREE.Mesh(new THREE.SphereGeometry(.95,12,8),wing);glass.position.z=0.64;g.add(glass);
+  for(const side of [-1,1]){
+    const arm=new THREE.Mesh(new THREE.CylinderGeometry(.23,.23,3,8),trim);arm.rotation.z=Math.PI/2;arm.position.x=side*2.2;g.add(arm);
+    const panel=new THREE.Mesh(new THREE.CylinderGeometry(3.3,3.3,.19,6),wing);panel.rotation.z=Math.PI/2;panel.position.x=side*4;g.add(panel);
+    const frame=new THREE.Mesh(new THREE.TorusGeometry(3.17,.13,5,6),trim);frame.rotation.y=Math.PI/2;frame.rotation.z=Math.PI/6;frame.position.x=side*4;g.add(frame);
+    for(let k=0;k<6;k++){const a=k*Math.PI/3;
+      const bar=new THREE.Mesh(new THREE.BoxGeometry(.11,.10,2.6),trim);
+      bar.position.set(side*4,Math.cos(a)*1.6,Math.sin(a)*1.6);bar.rotation.x=a;g.add(bar)}
+  }
+  g.scale.setScalar(.48);scene.add(g);return g;
+}
+const interceptors=Array.from({length:8},()=>makeInterceptor());
+function updateInterceptors(time,now){
+  interceptors.forEach((f,i)=>{
+    const start=7.25+i*.38, progress=Math.max(0,time-start);
+    f.visible=time>=start;
+    if(!f.visible)return;
+    const out=ease(Math.min(1,progress/2.8));
+    // The hangar opens under the forward third of ZHUK WORKSPACE.
+    const lane=i%2===0?-1:1, rank=Math.floor(i/2);
+    f.position.set(lane*(1.5+out*(10+rank*5)), -21+out*(2+rank*2.3), 14+out*(35+rank*9));
+    f.rotation.set(-.08+Math.sin(now*.001+i)*.04,lane*out*.12,lane*out*.16);
+  });
+}
 const planet=new THREE.Mesh(new THREE.SphereGeometry(78,48,32),new THREE.MeshStandardMaterial({color:0x45454b,roughness:1,metalness:0,emissive:0x151519,emissiveIntensity:.4}));planet.position.set(130,-72,-220);scene.add(planet);
 const atmo=new THREE.Mesh(new THREE.SphereGeometry(80,48,32),new THREE.MeshBasicMaterial({color:0x77777d,transparent:true,opacity:.09,side:THREE.BackSide}));atmo.position.copy(planet.position);scene.add(atmo);
 const starGeo=new THREE.BufferGeometry(),stars=[];for(let i=0;i<1900;i++){stars.push((Math.random()-.5)*1100,(Math.random()-.5)*750,-Math.random()*900-60)}starGeo.setAttribute('position',new THREE.Float32BufferAttribute(stars,3));
@@ -115,11 +146,12 @@ const lines=[];let streaks=new THREE.Group();scene.add(streaks);const lineMat=ne
 const ray=new THREE.Raycaster(),mouse=new THREE.Vector2();let timeline=0,playing=false,active=false,last=0,raf=0,lookX=0,lookY=0,drag=false,sx=0,sy=0,reduced=matchMedia('(prefers-reduced-motion:reduce)').matches;
 function ease(t){return 1-Math.pow(1-Math.max(0,Math.min(1,t)),3)}function mix(a,b,t){return a+(b-a)*t}
 function resize(){const w=root.clientWidth,h=root.clientHeight;if(!w||!h)return;renderer.setSize(w,h,false);camera.aspect=w/h;camera.fov=w<680?63:46;camera.position.z=w<680?190:135;camera.updateProjectionMatrix()}
-function replay(){timeline=0;playing=true;detail.hidden=true;status.textContent='FLEET ARRIVAL / IN PROGRESS'}
+function replay(){timeline=0;playing=true;interceptors.forEach(f=>f.visible=false);detail.hidden=true;status.textContent='FLEET ARRIVAL / IN PROGRESS'}
 function animate(now){raf=requestAnimationFrame(animate);if(!active||document.hidden)return;const dt=Math.min(.05,(now-last)/1000||.016);last=now;if(playing&&!reduced)timeline+=dt;if(reduced)timeline=99;
 const hyper=timeline>4.1&&timeline<5.35;streaks.visible=hyper;jump.classList.toggle('active',timeline>5.05&&timeline<5.25);
 ships.forEach((s,i)=>{const start=i===6?5.1:.6+i*.48;const duration=i===6?2.25:1.9;const t=ease((timeline-start)/duration);s.visible=t>0;s.position.copy(s.userData.target);s.position.z-= (1-t)*(i===6?430:240);s.position.y+=(1-t)*35;if(t>0)s.rotation.y=(i===6?0:Math.PI)+Math.sin(now*.00027+i)*.018;s.rotation.z=-.055+Math.sin(now*.00035+i)*.008;});
-if(timeline>7.6&&playing){playing=false;status.textContent='FLEET FORMATION COMPLETE / 07 VESSELS'}
+updateInterceptors(timeline,now);
+if(timeline>12.7&&playing){playing=false;status.textContent='FLEET FORMATION COMPLETE / 07 VESSELS + 08 INTERCEPTORS'}
 if(!playing&&timeline===0)status.textContent='SELECT A VESSEL';
 camera.position.x=mix(camera.position.x,lookX,Math.min(1,dt*1.5));camera.position.y=mix(camera.position.y,(root.clientWidth<680?30:27)+lookY,Math.min(1,dt*1.5));camera.lookAt(0,0,0);
 planet.rotation.y+=dt*.008;renderer.render(scene,camera)}
